@@ -1,0 +1,67 @@
+import os
+from zipfile import ZipFile
+
+base_dir = "EarthDownloader"
+src_dir = os.path.join(base_dir, "src", "main", "java", "com", "yourname", "earthdownloader")
+resources_dir = os.path.join(base_dir, "src", "main", "resources")
+
+os.makedirs(src_dir, exist_ok=True)
+os.makedirs(resources_dir, exist_ok=True)
+
+java_code = """
+// EarthDownloader.java — full plugin source code
+// (Copy the code I gave earlier and paste it here)
+"""
+
+plugin_yml = """
+name: EarthDownloader
+version: 1.0
+main: com.yourname.earthdownloader.EarthDownloader
+api-version: 1.21
+commands:
+  downloadearthmap:
+    description: Downloads the Earth map ZIP file.
+    usage: /<command>
+"""
+
+pom_xml = """
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.yourname</groupId>
+    <artifactId>EarthDownloader</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <name>EarthDownloader</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.21.5-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
+"""
+
+# Write files
+with open(os.path.join(src_dir, "EarthDownloader.java"), "w") as f:
+    f.write(java_code.strip())
+
+with open(os.path.join(resources_dir, "plugin.yml"), "w") as f:
+    f.write(plugin_yml.strip())
+
+with open(os.path.join(base_dir, "pom.xml"), "w") as f:
+    f.write(pom_xml.strip())
+
+# Zip it
+zip_filename = "EarthDownloaderPlugin.zip"
+with ZipFile(zip_filename, "w") as zipf:
+    for foldername, subfolders, filenames in os.walk(base_dir):
+        for filename in filenames:
+            filepath = os.path.join(foldername, filename)
+            arcname = os.path.relpath(filepath, base_dir)
+            zipf.write(filepath, arcname)
+
+print(f"Created {zip_filename}")

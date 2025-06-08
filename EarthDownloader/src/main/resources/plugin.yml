@@ -1,0 +1,8 @@
+name: EarthDownloader
+version: 1.0
+main: com.yourname.earthdownloader.EarthDownloader
+api-version: 1.21
+commands:
+  downloadearthmap:
+    description: Downloads the Earth map ZIP file.
+    usage: /<command>
